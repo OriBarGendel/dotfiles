@@ -460,12 +460,10 @@
 ;;;;; END OF WINDOW SETUP
 
 ;;;;; FILE MANAGER
-;; TODO - enable treemacs on startup. Couldn't find a way to do it (that works) :/
 (use-package! treemacs
   :config
   (treemacs-set-width 27)
-  (add-hook 'treemacs-mode-hook (balance-windows))
-  (add-hook 'treemacs-mode-hook (treemacs-follow-mode)))
+  (treemacs-follow-mode))
 ;;;;; END OF FILE MANAGER
 
 ;;;;; KEYBINDINGS
