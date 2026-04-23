@@ -340,12 +340,7 @@
 
 (use-package! org-roam-dailies
   :config
-  (setq org-roam-dailies-directory "./daily-notes/")
-  (setq org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           "* %?"
-           :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d>\n")))))
+  (setq org-roam-dailies-directory "./daily-notes/"))
 ;;;;; END OF ORG ROAM SETUP
 
 ;;;; BIBLIOGRAPHY SETUP
@@ -507,8 +502,16 @@
       "C-c s v" 'yas-visit-snippet-file
       "C-c s r" 'yas-reload-all)
 
-;; Open org-roam-dailies menu
-(map! "C-c d" 'org-roam-dailies-map)
+;; org-roam-dailies menu. Creating my own map for convenience, and with descriptions
+(map! :desc "Open org-dailies directory" "C-c d ." 'org-roam-dailies-find-directory
+      :desc "Open previous daily note" "C-c d p" 'org-roam-dailies-goto-previous-note
+      :desc "Open the next daily note" "C-c d n" 'org-roam-dailies-goto-next-note
+      :desc "Open an org daily note" "C-c d d" 'org-roam-dailies-goto-date
+      :desc "Open today's daily note" "C-c d t" 'org-roam-dailies-goto-today
+      :desc "Open yesterday's daily note" "C-c d y" 'org-roam-dailies-goto-yesterday
+      :desc "Open tomorrow's daily note" "C-c d m" 'org-roam-dailies-goto-tomorrow
+      :desc "Capture an entry in today's daily note" "C-c d c" 'org-roam-dailies-capture-today
+      :desc "Capture an entry in tomorrow's daily note" "C-c d v" 'org-roam-dailies-capture-tomorrow)
 
 ;; Org-ref bibliography link
 (map! :desc "Insert a citation link" :map org-mode-map "C-c i b" 'org-ref-insert-cite-link)
