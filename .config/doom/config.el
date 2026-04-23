@@ -31,7 +31,8 @@
 (use-package! org-id
   :config
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-costum-id)
-  (setq org-id-link-consider-parent-id t))
+  (setq org-id-link-consider-parent-id t)
+  (setq org-id-locations-file "~/Documents/.orgids"))
 
 ;; To show emphasis markers
 (use-package! org-appear
