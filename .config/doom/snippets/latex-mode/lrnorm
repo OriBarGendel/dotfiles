@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: lrnorm
+# key: lrnorm
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\left\lVert $1 \right\rVert$0

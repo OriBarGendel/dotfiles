@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: bigoplus
+# key: O+
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\bigoplus

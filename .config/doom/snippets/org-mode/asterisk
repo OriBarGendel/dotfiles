@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: asterisk
+# key: *
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\ast

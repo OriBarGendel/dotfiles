@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: set
+# key: set
+# group: math
+# condition: (texmathp)
+# --
+\\{$1 \mid $2\\}$0

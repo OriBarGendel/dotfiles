@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mathcal
+# key: cal
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\mathcal{$1}$0

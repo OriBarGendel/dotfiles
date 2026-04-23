@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: cap
+# key: NN
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\cap 

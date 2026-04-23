@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: subscript
+# key: __
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+_{$1}$0

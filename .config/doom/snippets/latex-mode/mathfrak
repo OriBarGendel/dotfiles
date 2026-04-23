@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mathfrak
+# key: frak
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\mathfrak{$1}$0

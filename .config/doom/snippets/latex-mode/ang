@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ang
+# key: ang
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\langle $1 \rangle$0

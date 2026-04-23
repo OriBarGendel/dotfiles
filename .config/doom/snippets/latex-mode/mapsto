@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mapsto
+# key: !>
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\mapsto 

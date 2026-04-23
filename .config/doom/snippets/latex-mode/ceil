@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ceil
+# key: ceil
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\lceil $1 \rceil$0

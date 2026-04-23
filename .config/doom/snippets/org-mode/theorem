@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# key: theorem
+# name: theorem
+# group: AMS theorem
+# --
+#+name: ${1:Theorem}
+#+attr_latex: options \{${1}\}\{${2}\}
+#+begin_theorem
+`(save-excursion (previous-line)(make-string (current-indentation) ?\s))`$0
+#+end_theorem

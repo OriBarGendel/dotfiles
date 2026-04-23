@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: lrfloor
+# key: lrfloor
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\left\lfloor $1 \right\rfloor$0

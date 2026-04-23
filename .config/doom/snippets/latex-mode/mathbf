@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mathbf
+# key: bf
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\mathbf{$1}$0

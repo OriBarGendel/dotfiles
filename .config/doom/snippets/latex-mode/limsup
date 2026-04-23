@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: limsup
+# key: limsup
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\limsum_{${1:${2:n} ${3:\to ${4:\infty}}}} $0

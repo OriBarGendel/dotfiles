@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mid
+# key: ||
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\mid 

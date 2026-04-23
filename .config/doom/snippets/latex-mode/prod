@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: prod
+# key: prod
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\prod_{${1:n=1}}${2:^{${3:\infty}\}} $0

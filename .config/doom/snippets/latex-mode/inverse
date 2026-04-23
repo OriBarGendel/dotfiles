@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: inverse
+# key: invs
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+^{-1}

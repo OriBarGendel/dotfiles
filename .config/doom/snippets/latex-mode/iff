@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: iff
+# key: iff
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\iff 

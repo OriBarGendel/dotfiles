@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: bigcap
+# key: nnn
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\bigcap_{${1:i \in I}} $0

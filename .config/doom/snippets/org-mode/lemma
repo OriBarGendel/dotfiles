@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# key: lemma
+# name: lemma
+# group: AMS lemma
+# --
+#+name: ${1:Lemma}
+#+attr_latex: options \{${1}\}\{${2}\}
+#+begin_lemma
+`(save-excursion (previous-line)(make-string (current-indentation) ?\s))`$0
+#+end_lemma

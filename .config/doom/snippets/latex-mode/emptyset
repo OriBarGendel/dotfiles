@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: emptyset
+# key: eset
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\emptyset

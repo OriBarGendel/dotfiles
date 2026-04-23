@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: pmatrix
+# key: pmat
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\begin{pmatrix} 
+    $0
+\end{pmatrix}

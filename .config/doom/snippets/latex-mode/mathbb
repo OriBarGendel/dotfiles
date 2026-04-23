@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mathbb
+# key: bb
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\mathbb{$1}$0

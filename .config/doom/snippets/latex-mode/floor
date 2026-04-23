@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: floor
+# key: floor
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\lfloor $1 \rfloor$0

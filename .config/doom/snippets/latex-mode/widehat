@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: widehat
+# key: hat
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\widehat{$1}$0

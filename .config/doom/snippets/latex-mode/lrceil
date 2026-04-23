@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: lrceil
+# key: lrceil
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\left\lceil $1 \right\rceil$0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: bigcup
+# key: uuu
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\bigcup_{${1:i \in I}} $0

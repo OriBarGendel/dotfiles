@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: lrabs
+# key: lrabs
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\left\lvert $1 \right\rvert$0

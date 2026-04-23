@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: subseteq
+# key: ceq
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\subseteq 

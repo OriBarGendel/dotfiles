@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: bigfun
+# key: bigfun
+# --
+\begin{align*}
+    $1 \; : \; $2 &\longrightarrow $3 \\\
+    $4 &\longmapsto $0
+\end{align*}

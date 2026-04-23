@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: liminf
+# key: liminf
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\liminf_{${1:${2:n} ${3:\to ${4:\infty}}}} $0

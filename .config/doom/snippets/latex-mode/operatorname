@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: operatorname
+# key: op
+# group: math
+# condition: (texmathp)
+# --
+\operatorname{$1}

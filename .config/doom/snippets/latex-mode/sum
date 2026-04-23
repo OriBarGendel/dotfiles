@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: sum
+# key: sum
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\sum_{${1:n=1}}${2:^{${3:\infty}\}} $0
