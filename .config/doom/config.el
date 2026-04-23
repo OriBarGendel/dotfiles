@@ -548,7 +548,7 @@
 ;; Projectile keybindings
 (map! "C-c o" 'projectile-command-map)
 
-;; Switch windows with numbers
+;; Window keybindings
 (map! :map winum-keymap
       "C-`" 'winum-select-window-by-number
       "M-1" 'winum-select-window-1
@@ -561,12 +561,15 @@
       "M-8" 'winum-select-window-8
       "M-9" 'winum-select-window-9
       "M-0" 'treemacs-select-window)
-
-;; switch-window keybindings
 (map! "C-c w o" 'switch-window
       "C-c w m" 'switch-window-then-maximize
       "C-c w v" 'switch-window-then-split-vertically
       "C-c w h" 'switch-window-then-split-horizontally
       "C-c w d" 'switch-window-then-delete
-      "C-c w k" 'switch-window-then-kill-buffer)
+      "C-c w k" 'switch-window-then-kill-buffer
+      "C-c w h" 'switch-window-mvborder-left
+      "C-c w l" 'switch-window-mvborder-right
+      "C-c w j" 'switch-window-mvborder-down
+      "C-c w k" 'switch-window-mvborder-up)
+(map! "C-c w b" 'balance-windows) ; can also use 'SPC w ='
 ;;;;; END OF KEYBINDINGS
