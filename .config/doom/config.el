@@ -86,11 +86,14 @@
 (use-package! org-latex-preview
   :config
   (add-hook 'org-mode-hook #'org-latex-preview-whole-buffer)
+  (add-hook 'org-mode-hook #'org-latex-preview-mode)
+  
   ;; Add packages to use in preview compilation
   (with-eval-after-load 'org
     (add-to-list 'org-latex-packages-alist '("" "tikz" t))
     (add-to-list 'org-latex-packages-alist '("" "tikz-cd" t))
-    (add-to-list 'org-latex-packages-alist '("" "mathtools" t)))
+    (add-to-list 'org-latex-packages-alist '("" "mathtools" t))
+    (add-to-list 'org-latex-packages-alist '("" "mathrsfs")))
 
   ;; Increase font size
   (plist-put org-latex-preview-appearance-options :scale 1.25)
@@ -163,6 +166,7 @@
    ;; Org styling, hide markup etc.
    org-hide-emphasis-markers t
    org-pretty-entities t
+   org-pretty-entities-include-sub-superscripts nil
    org-agenda-tags-column 0
    org-ellipsis "…"
 
