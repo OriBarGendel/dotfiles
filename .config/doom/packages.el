@@ -50,7 +50,6 @@
 ;; (unpin! t)
 
 
-;(package! neotree)
 (package! org :recipe
   (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
    (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
@@ -85,26 +84,10 @@
 (package! auctex)
 (package! ivy-bibtex)
 (package! org-roam-bibtex)
-;(package! pdf-tools)
-
-;; (package! pdf-tools :recipe
-;;           (:host github
-;;                  :repo "dalanicolai/pdf-tools"
-;;                  :branch "pdf-roll"
-;;                  :files ("lisp/*.el"
-;;                          "README"
-;;                          ("build" "Makefile")
-;;                          ("build" "server")
-;;                          (:exclude "lisp/tablist.el" "lisp/tablist-filter.el"))))
-
-;; (package! image-roll :recipe
-;;           (:host github
-;;                  :repo "dalanicolai/image-roll.el"))
 
 (package! pdf-tools :recipe
-  (:host github
-   :repo "aikrahguzar/pdf-tools"
-                                        ;:branch "continuous-scroll"
+  (:host codeberg
+   :repo "rahguzar/pdf-tools"
    :files ("lisp/*.el"
            "README"
            ("build" "Makefile")
