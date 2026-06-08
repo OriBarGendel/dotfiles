@@ -1,7 +1,7 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;;;;; GENERAL CONFIG
-(setq doom-theme 'doom-nord)
+(setq doom-theme 'doom-bluloco-dark)
 
 (setq display-line-numbers-type t)
 
@@ -400,9 +400,9 @@ as it opens in text mode for some reason."
 (defun find-org-notes-file (pdf-file)
   "Find org-notes file associated with a pdf file, created by ivy-bibtex.
 
-  'org-noter' looks for org files with the same name as the pdf file, but ivy-bibtex creates a file called ${citekey}.org.
+'org-noter' looks for org files with the same name as the pdf file, but ivy-bibtex creates a file called ${citekey}.org.
 
-  Requires BibtexParser."
+Requires the Python package BibtexParser."
   ;; For some reason 'shell-command-to-string' returns a string with a '\n' at the end, which messes up everything.
   ;; The solution is from here 'https://stackoverflow.com/a/5020475/13780781'. 
   (substring
