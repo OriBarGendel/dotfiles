@@ -209,7 +209,7 @@ as it opens in text mode for some reason."
   (setq TeX-parse-self t)
   (setq TeX-auto-save t)
   
-  (add-hook 'TeX-after-compilation-finished-functions #'my/revert-document-buffer)
+  (add-hook 'TeX-after-compilation-finished-functions #'my/revert-document-buffer))
 
 (use-package! cdlatex
   :config
