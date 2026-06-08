@@ -27,4 +27,4 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 export QT_STYLE_OVERRIDE=kvantum
 
-export PATH=$PATH:/usr/local/texlive/2026/bin/x86_64-linux/
+export PATH=$PATH:/usr/local/texlive/2026/bin/x86_64-linux/:~/.config/emacs/bin
