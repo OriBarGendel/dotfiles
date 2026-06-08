@@ -176,56 +176,40 @@
 ;;;;; LATEX SETUP
 ;; TODO - auctex setup does not work perfectly - when needing to run biber, it
 ;; does not automatically run LaTeX again. But this is relatively minor -
-;; one can use "C-c C-c" and run "my biber" (see below).
-(defun my-revert-document-buffer (file)
+;; one can use "C-c C-c" and run "Biber."
+
+(defun my/revert-document-buffer (file)
+  "Alternative to 'TeX-revert-document-buffer'.
+
+The function 'TeX-revert-document-buffer' enables 'pdf-view-mode' in the PDF buffer,
+but sometimes another run of 'pdf-view-mode' is needed to actually see the PDF,
+as it opens in text mode for some reason."
   (let ((buf (find-buffer-visiting file)))
     (when buf
       (with-current-buffer buf
         (revert-buffer nil t t)
         (pdf-view-mode)))))
 
-;; For some reason, the default "Biber" TeX-command complains that
-;; "Text is read-only," with no context whatsoever. Run "my-biber" instead.
-(defun my-biber ()
-  (add-to-list
-   'TeX-command-list
-   '("my biber"
-     "biber %(output-dir) %s"
-     TeX-run-silent ;TeX-run-shell
-     nil
-     t
-     :help "Run Biber")))
-
-(use-package! auctex
+(use-package! auctex 
+  :after tex
   :config
-  (add-hook 'latex-mode-hook 'LaTeX-mode)
-  (add-hook 'TeX-mode-hook #'my-biber)
+  (add-hook 'Latex-mode-hook 'TeX-source-correlate-mode)
   
   (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
         TeX-source-correlate-start-server t)
+    
   (setq-default TeX-engine 'xetex
-                TeX-PDF-mode t
                 TeX-save-query t
-                TeX-show-compilation t
-                TeX-command-extra-options "-shell-escape --synctex=1"
-                TeX-command-Biber "my biber")
-  (with-eval-after-load 'tex
-    (define-key TeX-source-correlate-map [C-down-mouse-1]
-                #'TeX-view-mouse))
-
-  (add-hook 'LaTeX-mode-hook 'TeX-interactive-mode)
-  (setq TeX-source-correlate-mode t
-        TeX-source-correlate-method 'synctex)
-
+                TeX-show-compilation nil
+                TeX-command-extra-options "-shell-escape --synctex=1")
+  
   (setq TeX-electric-sub-and-superscript nil)
 
   (setq TeX-parse-self t)
   (setq TeX-auto-save t)
   
-  (add-hook 'TeX-after-compilation-finished-functions #'my-revert-document-buffer)
-
-  (setq LaTeX-indent-environment-check nil))
+  (add-hook 'TeX-after-compilation-finished-functions #'my/revert-document-buffer)
 
 (use-package! cdlatex
   :config
@@ -481,14 +465,15 @@
 (map! :nv "<down>" 'evil-next-visual-line)
 (map! :nv "<up>" 'evil-previous-visual-line)
 
-;; Backward search
-(map! "C-S-s" 'isearch-backward)
-
 ;; Go back from an org link
 (map! :desc "Go back from an org link" "C-c g" 'org-mark-ring-goto)
 
 ;; Org-mode cross-reference links
 (map! :desc "Insert cross-references" :map org-mode-map "C-c i c" 'my/org-insert-link)
+
+;; auctex keybindings
+(with-eval-after-load 'tex
+  (map! :map TeX-source-correlate-map "C-<down-mouse-1>" #'TeX-view-mouse))
 
 ;; reftex keybindings
 (map! :map LaTeX-mode-map
@@ -519,6 +504,7 @@
 (map! :desc "Insert a citation link" :map org-mode-map "C-c i b" 'org-ref-insert-cite-link)
 
 ;; Open ivy-bibtex
+;; Use "M-o" on an ivy-bibtex item for more actions.
 (map! "C-c b" 'ivy-bibtex)
 
 ;; Insert link to a bibliography note
