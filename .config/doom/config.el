@@ -205,9 +205,8 @@ as it opens in text mode for some reason."
         (pdf-view-mode)))))
 
 (use-package! auctex 
-  :after tex
   :config
-  (add-hook 'Latex-mode-hook 'TeX-source-correlate-mode)
+  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   
   (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
@@ -220,8 +219,8 @@ as it opens in text mode for some reason."
   
   (setq TeX-electric-sub-and-superscript nil)
 
-  (setq TeX-parse-self t)
-  (setq TeX-auto-save t)
+  (setq TeX-parse-self t
+        TeX-auto-save t)
   
   (add-hook 'TeX-after-compilation-finished-functions #'my/revert-document-buffer))
 
@@ -488,8 +487,8 @@ Requires the Python package BibtexParser."
 (map! :desc "Insert cross-references" :map org-mode-map "C-c i c" 'my/org-insert-link)
 
 ;; auctex keybindings
-(with-eval-after-load 'tex
-  (map! :map TeX-source-correlate-map "C-<down-mouse-1>" #'TeX-view-mouse))
+(map! :map TeX-source-correlate-map
+      :desc "Sync pdf with current cursor position" "C-<down-mouse-1>" #'TeX-view-mouse)
 
 ;; reftex keybindings
 (map! :map LaTeX-mode-map
@@ -500,10 +499,10 @@ Requires the Python package BibtexParser."
       :desc "Insert a citation" "C-c c" 'ars/citation)
 
 ;; yasnippet keybindings
-(map! "C-c s n" 'yas-new-snippet
-      "C-c s i" 'yas-insert-snippet
-      "C-c s v" 'yas-visit-snippet-file
-      "C-c s r" 'yas-reload-all)
+(map! :desc "New snippet" "C-c s n" 'yas-new-snippet
+      :desc "Insert snippet" "C-c s i" 'consult-yasnippet
+      :desc "Visit snippets of current major mode" "C-c s v" 'consult-yasnippet-visit-snippet-file
+      :desc "Reload all snippets" "C-c s r" 'yas-reload-all)
 
 ;; org-roam-dailies menu. Creating my own map for convenience, and with descriptions
 (map! :desc "Open org-dailies directory" "C-c d ." 'org-roam-dailies-find-directory
