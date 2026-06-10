@@ -15,11 +15,25 @@
 (after! persp-mode
   (setq persp-emacsclient-init-frame-behaviour-override "main"))
 
+;; Auto-centres windows
 (use-package! perfect-margin
   :config
   (after! doom-modeline
     (setq mode-line-right-align-edge 'right-fringe))
   (perfect-margin-mode t))
+
+;; Spell checking
+(use-package! flyspell
+  :config
+  (add-hook! '(org-mode-hook LaTeX-mode-hook) 'flyspell-mode)
+  (add-hook! '(python-mode-hook
+               emacs-lisp-mode-hook
+               sh-mode-hook) 'flyspell-prog-mode))
+
+;; Syntax checking
+(use-package! flycheck
+  :config
+  (setq flycheck-checker-error-threshold 1000))
 ;;;;; END OF GENERAL CONFIG
 
 ;;;;; ORG SETUP
@@ -464,6 +478,8 @@ Requires the Python package BibtexParser."
 ;; From https://github.com/syl20bnr/spacemacs/issues/9557#issuecomment-328253891
 (map! :nv "<down>" 'evil-next-visual-line)
 (map! :nv "<up>" 'evil-previous-visual-line)
+
+(map! :desc "Navigate through errors in buffer" "C-c e" 'consult-flycheck)
 
 ;; Go back from an org link
 (map! :desc "Go back from an org link" "C-c g" 'org-mark-ring-goto)
