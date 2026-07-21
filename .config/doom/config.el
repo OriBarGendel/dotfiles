@@ -440,7 +440,8 @@ Requires the Python package BibtexParser."
   (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-width)
   (setq pdf-view-resize-factor 1.05)
-  (setq pdf-view-continuous t))
+  (setq pdf-view-continuous t)
+  (setq pdf-links-child-frame-auto-preview-wait 1))
 
 (use-package! image-roll
   :config
