@@ -1,7 +1,7 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;;;;; GENERAL CONFIG
-(setq doom-theme 'doom-bluloco-dark)
+(setq doom-theme 'doom-dracula)
 
 (setq display-line-numbers-type t)
 
