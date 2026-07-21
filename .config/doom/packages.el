@@ -82,11 +82,12 @@
 (package! org-ref)
 (package! org-roam)
 (package! org-appear)
-(package! auctex)
 (package! org-noter)
 (package! cdlatex)
 
 (package! swiper)
+
+(package! auctex)
 
 (package! ivy-bibtex)
 (package! org-roam-bibtex)
