@@ -24,11 +24,14 @@
 
 ;; Spell checking
 (use-package! flyspell
+  :init
+  (setq flyspell-default-dictionary "en_GB-ise-w_accents")
   :config
   (add-hook! '(org-mode-hook LaTeX-mode-hook) 'flyspell-mode)
   (add-hook! '(python-mode-hook
                emacs-lisp-mode-hook
-               sh-mode-hook) 'flyspell-prog-mode))
+               sh-mode-hook) 'flyspell-prog-mode)
+  (setq ispell-personal-dictionary "~/.aspell.en.pws"))
 
 ;; Syntax checking
 (use-package! flycheck

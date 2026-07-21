@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ldots
+# key: ...
+# group: math
+# condition: (and (texmathp) 'auto)
+# --
+\ldots
