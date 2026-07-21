@@ -77,11 +77,17 @@
 (unpin! org)
 
 (package! perfect-margin)
+
 (package! org-modern)
 (package! org-ref)
 (package! org-roam)
 (package! org-appear)
 (package! auctex)
+(package! org-noter)
+(package! cdlatex)
+
+(package! swiper)
+
 (package! ivy-bibtex)
 (package! org-roam-bibtex)
 
@@ -97,9 +103,6 @@
 (package! image-roll :recipe
   (:host github
    :repo "aikrahguzar/image-roll.el"))
-
-(package! org-noter)
-(package! cdlatex)
 
 (package! consult-reftex
   :recipe (:host github :repo "karthink/consult-reftex"))

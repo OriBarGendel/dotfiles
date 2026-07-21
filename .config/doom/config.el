@@ -472,7 +472,7 @@ Requires the Python package BibtexParser."
 ;;;;; END OF FILE MANAGER
 
 ;;;;; KEYBINDINGS
-;; Add scolling in minibuffer
+;; Add scrolling in minibuffer
 (map! :map minibuffer-local-map
       "C-S-<next>" 'scroll-up-command
       "C-S-<prior>" 'scroll-down-command) 
@@ -481,6 +481,9 @@ Requires the Python package BibtexParser."
 ;; From https://github.com/syl20bnr/spacemacs/issues/9557#issuecomment-328253891
 (map! :nv "<down>" 'evil-next-visual-line)
 (map! :nv "<up>" 'evil-previous-visual-line)
+
+;; Improved isearch
+(map! "C-s" #'swiper-isearch)
 
 (map! :desc "Navigate through errors in buffer" "C-c e" 'consult-flycheck)
 
