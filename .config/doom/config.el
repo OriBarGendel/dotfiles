@@ -454,8 +454,7 @@ Requires the Python package BibtexParser."
 ;;;;; LSP SETUP
 (use-package! lsp-mode
   :config
-  (add-hook! '(c-mode-hook
-               c++-mode-hook
+  (add-hook! '(c-mode-common-hook
                LaTeX-mode-hook) 'lsp)
   (add-hook! 'lsp-mode-hook 'lsp-inline-completion-company-integration-mode)
   (setq lsp-completion-enable-additional-text-edit nil)
@@ -513,8 +512,7 @@ Requires the Python package BibtexParser."
 
   ;; Hide tabs by default, only show them in specific major modes
   (add-hook! 'change-major-mode-after-body-hook (if (centaur-tabs-mode-on-p) (centaur-tabs-local-mode)))
-  (add-hook! '(c-mode-hook
-               c++-mode-hook
+  (add-hook! '(c-mode-common-hook
                eshell-mode-hook
                makefile-mode-hook
                cmake-mode-hook) (centaur-tabs-local-mode -1))
