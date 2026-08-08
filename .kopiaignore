@@ -32,6 +32,7 @@
 #.twister
 #/twister
 #Applications/eclipse*
+/ti/
 /Downloads
 #*Popcorntime*
 #/.aMule
