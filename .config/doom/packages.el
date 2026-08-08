@@ -107,3 +107,5 @@
 
 (package! consult-reftex
   :recipe (:host github :repo "karthink/consult-reftex"))
+
+(package! shell-pop)

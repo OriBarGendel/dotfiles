@@ -11,10 +11,6 @@
 ;; Open Emacs in fullscreen
 (push '(fullscreen . maximized) default-frame-alist)
 
-;; Open emacsclient in the main workspace
-(after! persp-mode
-  (setq persp-emacsclient-init-frame-behaviour-override "main"))
-
 ;; Auto-centres windows
 (use-package! perfect-margin
   :config
@@ -454,6 +450,130 @@ Requires the Python package BibtexParser."
   (projectile-mode))
 ;;;;; END OF PROJECT MANAGEMENT SETUP
 
+;;;;; LSP SETUP
+(use-package! lsp-mode
+  :config
+  (add-hook! '(c-mode-hook
+               c++-mode-hook) 'lsp)
+  (add-hook! 'lsp-mode-hook 'lsp-inline-completion-company-integration-mode)
+  (setq lsp-completion-enable-additional-text-edit nil)
+  (setq lsp-eldoc-render-all t))
+;;;;; END OF LSP SETUP
+
+;;;;; COMPILATION SETUP
+(use-package! make-mode)
+(use-package! cmake-mode)
+(use-package! compile
+  :config
+  (setq compilation-window-height 10)
+
+  (defun my/run-program-in-pop (buf str)
+    ;; Immediately remove the hook of this function, so that other compilations do not run it
+    (remove-hook 'compilation-finish-functions #'my/run-program-in-pop)
+    (if (null (string-match "abnormally" str))
+        ;; no errors
+        (progn
+          ;; close the compilation window after 1 second
+          (run-at-time "1 sec" nil
+                     (lambda (buf)
+                       (with-selected-window (get-buffer-window buf)
+                         (delete-window)))
+                     buf)
+          ;; pop shell
+          (shell-pop 1)
+          ;; run
+          (process-send-string (get-buffer-process (current-buffer)) "make run\n")))))
+
+(use-package! shell-pop
+  :custom
+  (shell-pop-shell-type '("ansi-term" "*ansi-term*"
+                          (lambda ()
+                            (ansi-term shell-pop-term-shell))))
+  (shell-pop-window-height 30) ; Percentage of the frame height
+  (shell-pop-window-position "bottom"))
+
+(defun my/compile-run-in-pop ()
+  "Compile the current project or file, open a popup terminal and execute the binary if compilation succeeds."
+  (interactive)
+
+  ;; Run the program after compilation
+  (add-hook 'compilation-finish-functions #'my/run-program-in-pop)
+
+  (compile "make -k"))
+;;;;; END OF SHELL POP SETUP
+
+;;;;; TAB SETUP
+(use-package! centaur-tabs
+  :init
+  (setq centaur-tabs-enable-key-bindings t)
+  :config
+  (centaur-tabs-mode)
+
+  ;; Hide tabs by default, only show them in specific major modes
+  (add-hook! 'change-major-mode-after-body-hook (if (centaur-tabs-mode-on-p) (centaur-tabs-local-mode)))
+  (add-hook! '(c-mode-hook
+               c++-mode-hook
+               eshell-mode-hook
+               makefile-mode-hook
+               cmake-mode-hook) (centaur-tabs-local-mode -1))
+  
+  (setq centaur-tabs-style 'slant)
+  (setq centaur-tabs-icon-type 'nerd-icons)
+  (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-set-bar 'left)
+  (setq centaur-tabs-cycle-scope 'tabs)
+
+  (defvar my/centaur-tabs-target-group nil
+    "Used to store the active group name right before a shell buffer is created.")
+
+  (defun my/centaur-tabs-capture-active-group (rest)
+    "Capture the group name of the buffer we are currently in."
+    (setq my/centaur-tabs-target-group (centaur-tabs-buffer-groups-result)))
+
+  ;; Capture the source group before the term buffers open
+  (advice-add 'eshell :before #'my/centaur-tabs-capture-active-group)
+  (advice-add 'shell :before #'my/centaur-tabs-capture-active-group)
+  (advice-add 'term :before #'my/centaur-tabs-capture-active-group)
+
+  ;; Overwrite the grouping rules
+  (defun centaur-tabs-buffer-groups ()
+    "Custom rules for centaur-tabs grouping. Groups shell buffers with the buffers they were opened from."
+    (list
+     (cond
+      ;; Check if this is in a project
+      ((when-let* ((project-name (centaur-tabs-project-name)))
+         project-name))
+      
+      ;; Check if this is a shell and we have a captured target group
+      ((memq major-mode
+             '( eshell-mode
+                term-mode
+                shell-mode))
+       my/centaur-tabs-target-group)
+
+      ;; Magit
+      ((memq major-mode '( magit-process-mode
+                           magit-status-mode
+                           magit-log-mode
+                           magit-file-mode
+                           magit-blob-mode
+                           magit-blame-mode
+                           magit-diff-mode
+                           magit-revision-mode
+                           magit-stash-mode))
+       "Magit")
+
+      ;; Dired-derived modes
+      ((derived-mode-p 'dired-mode) "Dired")
+
+      ;; Hidden buffers
+      ((string-equal "*" (substring (buffer-name) 0 1)) "Emacs")
+      
+      ;; Fallback to normal grouping rules
+      (t
+       (centaur-tabs-get-group-name (current-buffer)))))))
+;;;;; END OF TAB SETUP
+
 ;;;;; WINDOW SETUP
 (use-package! winum
   :config
@@ -465,10 +585,14 @@ Requires the Python package BibtexParser."
 ;;;;; END OF WINDOW SETUP
 
 ;;;;; FILE MANAGER
-(use-package! treemacs
+(setq delete-by-moving-to-trash t)
+(use-package! dirvish
   :config
-  (treemacs-set-width 27)
-  (treemacs-follow-mode))
+  (dirvish-side-follow-mode)
+  
+  (setq dired-mouse-drag-files t) 
+  (setq mouse-drag-and-drop-region-cross-program t)
+  (setq mouse-1-click-follows-link nil))
 ;;;;; END OF FILE MANAGER
 
 ;;;;; KEYBINDINGS
@@ -476,6 +600,12 @@ Requires the Python package BibtexParser."
 (map! :map minibuffer-local-map
       "C-S-<next>" 'scroll-up-command
       "C-S-<prior>" 'scroll-down-command) 
+
+;; Company keybindings
+(map! :map company-active-map
+      "<tab>" 'company-complete-selection
+      "RET" nil
+      "<return>" nil)
 
 ;; Going up and down visual lines instead of logical lines in normal mode.
 ;; From https://github.com/syl20bnr/spacemacs/issues/9557#issuecomment-328253891
@@ -485,10 +615,13 @@ Requires the Python package BibtexParser."
 ;; Improved isearch
 (map! "C-s" #'swiper-isearch)
 
+;; Consult the kill ring and paste from it
+(map! "M-y" #'consult-yank-from-kill-ring)
+
 (map! :desc "Navigate through errors in buffer" "C-c e" 'consult-flycheck)
 
 ;; Go back from an org link
-(map! :desc "Go back from an org link" "C-c g" 'org-mark-ring-goto)
+(map! :desc "Go back from an org link" "C-c g b" 'org-mark-ring-goto)
 
 ;; Org-mode cross-reference links
 (map! :desc "Insert cross-references" :map org-mode-map "C-c i c" 'my/org-insert-link)
@@ -499,9 +632,8 @@ Requires the Python package BibtexParser."
 
 ;; reftex keybindings
 (map! :map LaTeX-mode-map
-      :desc "Open TOC" "C-c t" 'reftex-toc
-      :desc "Insert a label" "C-c l i" 'reftex-label
-      :desc "Goto label" "C-c l g" 'consult-reftex-goto-label
+      :desc "Insert a label" "C-c i l" 'reftex-label
+      :desc "Goto label" "C-c g l" 'consult-reftex-goto-label
       :desc "Insert a label reference" "C-c r" 'consult-reftex-insert-reference
       :desc "Insert a citation" "C-c c" 'ars/citation)
 
@@ -555,8 +687,35 @@ Requires the Python package BibtexParser."
       :n "<next>" nil
       :n "<prior>" nil)
 
-;; Projectile keybindings
-(map! "C-c o" 'projectile-command-map)
+;; LSP keybindings
+(map! :map lsp-mode-map "C-c l" lsp-command-map)
+
+;; Compile keybindings
+(map! :map (c-mode-map
+            c++-mode-map
+            makefile-mode-map
+            cmake-mode-map)
+      "SPC c R"
+      'my/compile-run-in-pop)
+
+;; Tab keybindings
+(map! :map centaur-tabs-prefix-map
+      "k" 'centaur-tabs--kill-this-buffer-dont-ask
+      "n" 'centaur-tabs--create-new-tab)
+(map! :map centaur-tabs-mode-map
+      "C-<prior>" 'centaur-tabs-backward
+      "C-<next>" 'centaur-tabs-forward
+      "C-S-<prior>" 'centaur-tabs-move-current-tab-to-left
+      "C-S-<next>" 'centaur-tabs-move-current-tab-to-right)
+
+;; Dirvish keybindings
+(map! :desc "Dirvish" "C-c f" 'dirvish)
+(map! :map dirvish-mode-map
+      "<mouse-1>" 'dirvish-subtree-toggle-or-open
+      "<mouse-2>" 'dired-mouse-find-file-other-window
+      "<mouse-3>" 'dired-mouse-find-file
+      "M-p" 'dirvish-yank-menu
+      :n "M-p" 'dirvish-yank-menu)
 
 ;; Window keybindings
 (map! :map winum-keymap
@@ -570,7 +729,7 @@ Requires the Python package BibtexParser."
       "M-7" 'winum-select-window-7
       "M-8" 'winum-select-window-8
       "M-9" 'winum-select-window-9
-      "M-0" 'treemacs-select-window)
+      "M-0" 'dirvish-side)
 (map! "C-c w o" 'switch-window
       "C-c w m" 'switch-window-then-maximize
       "C-c w v" 'switch-window-then-split-vertically
