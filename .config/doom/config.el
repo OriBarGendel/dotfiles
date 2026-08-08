@@ -23,7 +23,8 @@
   :init
   (setq flyspell-default-dictionary "en_GB-ise-w_accents")
   :config
-  (add-hook! '(org-mode-hook LaTeX-mode-hook) 'flyspell-mode)
+  (add-hook! '(org-mode-hook
+               LaTeX-mode-hook) 'flyspell-mode)
   (add-hook! '(python-mode-hook
                emacs-lisp-mode-hook
                sh-mode-hook) 'flyspell-prog-mode)
@@ -454,7 +455,8 @@ Requires the Python package BibtexParser."
 (use-package! lsp-mode
   :config
   (add-hook! '(c-mode-hook
-               c++-mode-hook) 'lsp)
+               c++-mode-hook
+               LaTeX-mode-hook) 'lsp)
   (add-hook! 'lsp-mode-hook 'lsp-inline-completion-company-integration-mode)
   (setq lsp-completion-enable-additional-text-edit nil)
   (setq lsp-eldoc-render-all t))
