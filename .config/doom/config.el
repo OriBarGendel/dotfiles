@@ -618,6 +618,9 @@ Requires the Python package BibtexParser."
 ;; Consult the kill ring and paste from it
 (map! "M-y" #'consult-yank-from-kill-ring)
 
+(map! :map flyspell-mode-map
+      :desc "Correct words, moving backwards in the buffer" "C-;" 'flyspell-correct-wrapper)
+
 (map! :desc "Navigate through errors in buffer" "C-c e" 'consult-flycheck)
 
 ;; Go back from an org link
@@ -634,8 +637,8 @@ Requires the Python package BibtexParser."
 (map! :map LaTeX-mode-map
       :desc "Insert a label" "C-c i l" 'reftex-label
       :desc "Goto label" "C-c g l" 'consult-reftex-goto-label
-      :desc "Insert a label reference" "C-c r" 'consult-reftex-insert-reference
-      :desc "Insert a citation" "C-c c" 'ars/citation)
+      :desc "Insert a label reference" "C-c i r" 'consult-reftex-insert-reference
+      :desc "Insert a citation" "C-c i c" 'ars/citation)
 
 ;; yasnippet keybindings
 (map! :desc "New snippet" "C-c s n" 'yas-new-snippet
@@ -644,29 +647,29 @@ Requires the Python package BibtexParser."
       :desc "Reload all snippets" "C-c s r" 'yas-reload-all)
 
 ;; org-roam-dailies menu. Creating my own map for convenience, and with descriptions
-(map! :desc "Open org-dailies directory" "C-c d ." 'org-roam-dailies-find-directory
-      :desc "Open previous daily note" "C-c d p" 'org-roam-dailies-goto-previous-note
-      :desc "Open the next daily note" "C-c d n" 'org-roam-dailies-goto-next-note
-      :desc "Open an org daily note" "C-c d d" 'org-roam-dailies-goto-date
-      :desc "Open today's daily note" "C-c d t" 'org-roam-dailies-goto-today
-      :desc "Open yesterday's daily note" "C-c d y" 'org-roam-dailies-goto-yesterday
-      :desc "Open tomorrow's daily note" "C-c d m" 'org-roam-dailies-goto-tomorrow
-      :desc "Capture an entry in today's daily note" "C-c d c" 'org-roam-dailies-capture-today
-      :desc "Capture an entry in tomorrow's daily note" "C-c d v" 'org-roam-dailies-capture-tomorrow)
+(map! :desc "Open org-dailies directory" "C-c o d ." 'org-roam-dailies-find-directory
+      :desc "Open previous daily note" "C-c o d p" 'org-roam-dailies-goto-previous-note
+      :desc "Open the next daily note" "C-c o d n" 'org-roam-dailies-goto-next-note
+      :desc "Open an org daily note" "C-c o d d" 'org-roam-dailies-goto-date
+      :desc "Open today's daily note" "C-c o d t" 'org-roam-dailies-goto-today
+      :desc "Open yesterday's daily note" "C-c o d y" 'org-roam-dailies-goto-yesterday
+      :desc "Open tomorrow's daily note" "C-c o d m" 'org-roam-dailies-goto-tomorrow
+      :desc "Capture an entry in today's daily note" "C-c o d c" 'org-roam-dailies-capture-today
+      :desc "Capture an entry in tomorrow's daily note" "C-c o d v" 'org-roam-dailies-capture-tomorrow)
 
 ;; Org-ref bibliography link
 (map! :desc "Insert a citation link" :map org-mode-map "C-c i b" 'org-ref-insert-cite-link)
 
 ;; Open ivy-bibtex
 ;; Use "M-o" on an ivy-bibtex item for more actions.
-(map! "C-c b" 'ivy-bibtex)
+(map! "C-c o b" 'ivy-bibtex)
 
 ;; Insert link to a bibliography note
 (map! :desc "Insert link to a bib note" :map org-roam-bibtex-mode-map "C-c i n" 'orb-insert-link)
 
 ;; org-noter keybindings
 (map! :map (pdf-view-mode-map org-mode-map)
-      "C-c n" 'org-noter)
+      "C-c o n" 'org-noter)
 (map! :map org-noter-doc-mode-map
       "C-c i" 'org-noter-insert-note
       "C-c k" 'org-noter-kill-session)
@@ -709,7 +712,7 @@ Requires the Python package BibtexParser."
       "C-S-<next>" 'centaur-tabs-move-current-tab-to-right)
 
 ;; Dirvish keybindings
-(map! :desc "Dirvish" "C-c f" 'dirvish)
+(map! :desc "Dirvish" "C-c o f" 'dirvish)
 (map! :map dirvish-mode-map
       "<mouse-1>" 'dirvish-subtree-toggle-or-open
       "<mouse-2>" 'dired-mouse-find-file-other-window
