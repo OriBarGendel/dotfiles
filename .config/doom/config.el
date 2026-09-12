@@ -327,6 +327,40 @@ as it opens in text mode for some reason."
               "insert"))
    :sort t
    :caller 'ars/citation))
+
+;; From https://github.com/varkor/quiver/wiki/Editor-integration
+(defun replace-quiver-diagram ()
+  "Extracts the quiver URL from the diagram under cursor and runs it in browser. Selects the diagram."
+  (interactive)
+    (let ((start 0)
+	  (end 0)
+	  (url-start 0)
+	  (url-end 0)
+	  (url ""))
+      (save-excursion
+	(save-excursion
+	  (re-search-backward "% https://q.uiver.app" nil)
+	  (setq url-start (+ 2 (point)))
+	  (beginning-of-line)
+	  (setq start (point))
+	(save-excursion
+	  (re-search-forward "\\\\end{tikzcd}" nil)
+	  (setq end (point)))
+	(save-excursion
+	  (goto-char url-start)
+	  (re-search-forward "\n" nil)
+	  (setq url-end (- (point) 1))
+	  (skip-chars-forward " ")
+	  ;; If the next two symbols after new line, up to whitespace,
+	  ;; are "\[", modify the `end` value to be after \].
+	  (when (string= "[" (string (char-after (+ 1 (point)))))
+	      (setq end (+ 2 end))))
+	(setq url (buffer-substring-no-properties url-start url-end))
+	(start-process "" nil
+		       ;; Edit this line to change the browser.
+		       "vivaldi" url)))
+      (goto-char start)
+      (push-mark end t t)))
 ;;;;; END OF LATEX SETUP
 
 ;;;;; SNIPPETS SETUP
@@ -661,8 +695,10 @@ Requires the Python package BibtexParser."
 ;; Go back from an org link
 (map! :desc "Go back from an org link" "C-c g b" 'org-mark-ring-goto)
 
-;; Org-mode cross-reference links
-(map! :desc "Insert cross-references" :map org-mode-map "C-c i c" 'my/org-insert-link)
+;; org mode keybindings
+(map! :map org-mode-map
+      :desc "Insert cross-references" "C-c i c" 'my/org-insert-link
+      :desc "Edit quiver diagram" "C-c q" 'replace-quiver-diagram)
 
 ;; auctex keybindings
 (map! :map TeX-source-correlate-map
@@ -673,7 +709,8 @@ Requires the Python package BibtexParser."
       :desc "Insert a label" "C-c i l" 'reftex-label
       :desc "Goto label" "C-c g l" 'consult-reftex-goto-label
       :desc "Insert a label reference" "C-c i r" 'consult-reftex-insert-reference
-      :desc "Insert a citation" "C-c i c" 'ars/citation)
+      :desc "Insert a citation" "C-c i c" 'ars/citation
+      :desc "Edit quiver diagram" "C-c q" 'replace-quiver-diagram)
 
 ;; yasnippet keybindings
 (map! :desc "New snippet" "C-c s n" 'yas-new-snippet
