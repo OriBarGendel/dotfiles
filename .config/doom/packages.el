@@ -111,3 +111,5 @@
 (package! shell-pop)
 
 (package! drag-stuff)
+
+(package! saveplace-pdf-view)

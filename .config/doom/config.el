@@ -46,6 +46,8 @@
   (drag-stuff-global-mode)
   (drag-stuff-define-keys))
 
+;; Enable saving place in files
+(save-place-mode)
 ;;;;; END OF GENERAL CONFIG
 
 ;;;;; ORG SETUP
@@ -454,7 +456,20 @@ Requires the Python package BibtexParser."
 
 (use-package! image-roll
   :config
-  (add-hook 'pdf-view-mode-hook 'pdf-view-roll-minor-mode))
+  (add-hook 'org-noter-doc-mode-hook 'pdf-view-roll-minor-mode))
+
+(defun my/image-roll-advice ()
+  (if (derived-mode-p 'pdf-view-mode)
+      (pdf-view-roll-minor-mode)))
+
+(use-package! saveplace-pdf-view
+  :config
+  ;; Does not work well with image-roll, so we need to enable image-roll only after saveplace does its job.
+  ;; For some reason, adding a hook to `save-place-after-find-file-hook' does not work, go figure...
+  ;; BUG: image-roll does not get enabled automatically when the pdf is opened by org-noter via the notes file,
+  ;; maybe org-noter does not load save-place, which would make sense. But then save-place is enabled in the pdf buffer,
+  ;; so I'm not sure.
+  (advice-add 'save-place-find-file-hook :after 'my/image-roll-advice))
 ;;;;; END OF PDF SETUP
 
 ;;;;; PROJECT MANAGEMENT SETUP
