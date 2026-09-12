@@ -115,13 +115,21 @@
   :config
   (add-hook 'org-mode-hook #'org-latex-preview-whole-buffer)
   (add-hook 'org-mode-hook #'org-latex-preview-mode)
+
+  ;; Removes --optimize option in dvisvgm, as it caused tikz-cd diagrams to look squashed.
+  (setf (alist-get 'dvisvgm org-latex-preview-process-alist)
+        (plist-put (alist-get 'dvisvgm org-preview-latex-process-alist)
+                   :image-converter
+                   '("dvisvgm --page=1- --clipjoin --relative --no-fonts -v3 --currentcolor --bbox=preview
+                  --message='processing page {?pageno}: output written to {?svgpath}' -o %B-%%9p.svg %f")))
+  (setq org-latex-preview-process-default 'dvisvgm)
   
   ;; Add packages to use in preview compilation
   (with-eval-after-load 'org
     (add-to-list 'org-latex-packages-alist '("" "tikz" t))
     (add-to-list 'org-latex-packages-alist '("" "tikz-cd" t))
     (add-to-list 'org-latex-packages-alist '("" "mathtools" t))
-    (add-to-list 'org-latex-packages-alist '("" "mathrsfs")))
+    (add-to-list 'org-latex-packages-alist '("" "mathrsfs" t)))
 
   ;; Increase font size
   (plist-put org-latex-preview-appearance-options :scale 1.25)
