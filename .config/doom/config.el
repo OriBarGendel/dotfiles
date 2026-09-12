@@ -511,7 +511,8 @@ Requires the Python package BibtexParser V2."
   (setq-default pdf-view-display-size 'fit-width)
   (setq pdf-view-resize-factor 1.05)
   (setq pdf-view-continuous t)
-  (setq pdf-links-child-frame-auto-preview-wait 1))
+  (setq pdf-links-child-frame-auto-preview-wait 1)
+  (pdf-view-set-selection-style 'glyph))
 
 (use-package! image-roll
   :config
@@ -775,6 +776,8 @@ Requires the Python package BibtexParser V2."
       "<prior>" 'pdf-roll-scroll-screen-backward
       "S-<next>" nil
       "S-<prior>" nil)
+(map! :map pdf-sync-minor-mode-map
+      "<double-mouse-1>" nil)
 (map! :map pdf-view-mode-map
       "S-<next>" 'pdf-view-next-page
       "S-<prior>" 'pdf-view-previous-page
