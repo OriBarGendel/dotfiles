@@ -549,7 +549,8 @@ Requires the Python package BibtexParser V2."
                LaTeX-mode-hook) 'lsp)
   (add-hook! 'lsp-mode-hook 'lsp-inline-completion-company-integration-mode)
   (setq lsp-completion-enable-additional-text-edit nil)
-  (setq lsp-eldoc-render-all t))
+  (setq lsp-eldoc-render-all t)
+  (add-hook! 'LaTeX-mode-hook (setq-local lsp-eldoc-render-all nil)))
 ;;;;; END OF LSP SETUP
 
 ;;;;; COMPILATION SETUP
@@ -592,7 +593,7 @@ Requires the Python package BibtexParser V2."
   (add-hook 'compilation-finish-functions #'my/run-program-in-pop)
 
   (compile "make -k"))
-;;;;; END OF SHELL POP SETUP
+;;;;; END OF COMPILATION SETUP
 
 ;;;;; TAB SETUP
 (use-package! centaur-tabs
@@ -794,8 +795,7 @@ Requires the Python package BibtexParser V2."
             c++-mode-map
             makefile-mode-map
             cmake-mode-map)
-      "SPC c R"
-      'my/compile-run-in-pop)
+      :nv "SPC c R" 'my/compile-run-in-pop)
 
 ;; Tab keybindings
 (map! :map centaur-tabs-prefix-map
