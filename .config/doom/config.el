@@ -388,16 +388,20 @@ as it opens in text mode for some reason."
     (setq-local mode-require-final-newline nil)))
 
 (defun my/yas-expand-or-corfu-insert ()
-  "Expand a snippet if a trigger matches, otherwise insert the Corfu candidate."
+  "Expand a yasnippet at point if one matches, if the
+corfu popup is active move to the next candidate, otherwise fall
+back to normal `indent-for-tab-command'."
   (interactive)
-  (unless (and (featurep 'yasnippet)
-               (yas-expand))
-    (if (and (featurep 'corfu) corfu--candidates)
-        (corfu-insert)
-      (indent-for-tab-command))))
+    (or (and (bound-and-true-p yas-minor-mode) (yas-expand))
+        (and (bound-and-true-p corfu-mode)
+             completion-in-region-mode
+             (progn (corfu-next) t))
+        (indent-for-tab-command)))
 
 (use-package corfu
   :config
+  (setq corfu-on-exact-match nil)
+  (setq corfu-preview-current nil)
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
 
   :init
@@ -734,11 +738,7 @@ Requires the Python package BibtexParser V2."
       :ig "TAB" 'my/yas-expand-or-corfu-insert
       :ig "<tab>" 'my/yas-expand-or-corfu-insert
       :ig "S-TAB" 'corfu-previous
-      :ig "<backtab>" 'corfu-previous
-      :ig "<down>" nil
-      :ig "<up>" nil
-      :r "<next-line>" nil
-      :r "<previous-line>" nil)
+      :ig "<backtab>" 'corfu-previous)
 
 ;; org-roam-dailies menu. Creating my own map for convenience, and with descriptions
 (map! :desc "Open org-dailies directory" "C-c o d ." 'org-roam-dailies-find-directory
