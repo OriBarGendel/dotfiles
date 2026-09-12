@@ -386,6 +386,23 @@ as it opens in text mode for some reason."
     "Custom behaviours for `snippet-mode'."
     (setq-local require-final-newline nil)
     (setq-local mode-require-final-newline nil)))
+
+(defun my/yas-expand-or-corfu-insert ()
+  "Expand a snippet if a trigger matches, otherwise insert the Corfu candidate."
+  (interactive)
+  (unless (and (featurep 'yasnippet)
+               (yas-expand))
+    (if (and (featurep 'corfu) corfu--candidates)
+        (corfu-insert)
+      (indent-for-tab-command))))
+
+(use-package corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
+
+  :init
+  (global-corfu-mode))
+
 ;;;;; END OF SNIPPETS SETUP
 
 ;;;;; ORG ROAM SETUP
@@ -670,12 +687,6 @@ Requires the Python package BibtexParser."
       "C-S-<next>" 'scroll-up-command
       "C-S-<prior>" 'scroll-down-command) 
 
-;; Company keybindings
-(map! :map company-active-map
-      "<tab>" 'company-complete-selection
-      "RET" nil
-      "<return>" nil)
-
 ;; Going up and down visual lines instead of logical lines in normal mode.
 ;; From https://github.com/syl20bnr/spacemacs/issues/9557#issuecomment-328253891
 (map! :nv "<down>" 'evil-next-visual-line)
@@ -717,6 +728,16 @@ Requires the Python package BibtexParser."
       :desc "Insert snippet" "C-c s i" 'consult-yasnippet
       :desc "Visit snippets of current major mode" "C-c s v" 'consult-yasnippet-visit-snippet-file
       :desc "Reload all snippets" "C-c s r" 'yas-reload-all)
+
+(map! :map corfu-map
+      :ig "TAB" 'my/yas-expand-or-corfu-insert
+      :ig "<tab>" 'my/yas-expand-or-corfu-insert
+      :ig "S-TAB" 'corfu-previous
+      :ig "<backtab>" 'corfu-previous
+      :ig "<down>" nil
+      :ig "<up>" nil
+      :r "<next-line>" nil
+      :r "<previous-line>" nil)
 
 ;; org-roam-dailies menu. Creating my own map for convenience, and with descriptions
 (map! :desc "Open org-dailies directory" "C-c o d ." 'org-roam-dailies-find-directory

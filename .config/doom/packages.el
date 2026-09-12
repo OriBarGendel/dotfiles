@@ -113,3 +113,5 @@
 (package! drag-stuff)
 
 (package! saveplace-pdf-view)
+
+(package! nerd-icons-corfu)
