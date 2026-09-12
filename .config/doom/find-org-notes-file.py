@@ -17,3 +17,5 @@ for entry in library.entries:
             for f in files:
                 if Path(f).name == Path(pdf_file).name:
                     sys.exit(entry.key + ".org")
+
+sys.exit("")

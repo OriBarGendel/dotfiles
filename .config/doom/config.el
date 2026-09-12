@@ -428,7 +428,7 @@ as it opens in text mode for some reason."
   :config
   (setq bibtex-completion-bibliography '("~/Zotero/bib-files/refs.bib")) 
   (setq bibtex-completion-pdf-field "File")
-  (setq bibtex-completion-notes-path "~/Documents/notes/pdf-notes/")
+  (setq bibtex-completion-notes-path "~/Documents/notes/bib-notes/")
 
   ;; BEGIN: Change insert citation (<f3>) behaviour of ivy-bibtex for org-mode
   (defun custom/bibtex-completion-format-citation-org (keys)
@@ -464,8 +464,8 @@ as it opens in text mode for some reason."
 ;; ask for a template in the first try, only in the second.
 (add-to-list 'org-roam-capture-templates
              '("b" "bibliography notes" plain             ; Org-noter integration
-               (file "~/Documents/notes/pdf-notes/notes-template.org")
-               :target (file+head "~/Documents/notes/pdf-notes/${citekey}.org" ;"~/Documents/notes/pdf-notes/${title}.org"
+               (file (expand-file-name "notes-template.org" bibtex-completion-notes-path))
+               :target (file+head (expand-file-name "${citekey}.org" bibtex-completion-not)
                                   "#+title: ${title}")
                :empty-lines 1
                :unarrowed t))
@@ -488,16 +488,16 @@ as it opens in text mode for some reason."
 
 'org-noter' looks for org files with the same name as the pdf file, but ivy-bibtex creates a file called ${citekey}.org.
 
-Requires the Python package BibtexParser."
+Requires the Python package BibtexParser V2."
   ;; For some reason 'shell-command-to-string' returns a string with a '\n' at the end, which messes up everything.
   ;; The solution is from here 'https://stackoverflow.com/a/5020475/13780781'. 
-  (substring
-   (shell-command-to-string (concat "python3 " doom-user-dir "find-org-notes-file.py \"" pdf-file "\""))
-   0 -1))
+  (let ((file (shell-command-to-string (concat "python3 " doom-user-dir "find-org-notes-file.py \"" pdf-file "\""))))
+    (unless (string= file "\n")
+      (substring file 0 -1))))
 
 (use-package! org-noter
   :config
-  (setq org-noter-notes-search-path '("~/Documents/notes/pdf-notes/"))
+  (setq org-noter-notes-search-path `(,bibtex-completion-notes-path))
   (setq org-noter-always-create-frame nil)
   (setq org-noter-find-additional-notes-functions 'find-org-notes-file)
   (setq org-noter-hide-other t))
