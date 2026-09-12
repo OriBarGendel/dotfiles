@@ -680,11 +680,8 @@ Requires the Python package BibtexParser V2."
 (setq delete-by-moving-to-trash t)
 (use-package! dirvish
   :config
-  (dirvish-side-follow-mode)
-  
   (setq dired-mouse-drag-files t) 
-  (setq mouse-drag-and-drop-region-cross-program t)
-  (setq mouse-1-click-follows-link nil))
+  (setq mouse-drag-and-drop-region-cross-program t))
 ;;;;; END OF FILE MANAGER
 
 ;;;;; KEYBINDINGS
