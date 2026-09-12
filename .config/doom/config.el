@@ -600,14 +600,16 @@ Requires the Python package BibtexParser V2."
   :init
   (setq centaur-tabs-enable-key-bindings t)
   :config
-  (centaur-tabs-mode)
-
-  ;; Hide tabs by default, only show them in specific major modes
-  (add-hook! 'change-major-mode-after-body-hook (if (centaur-tabs-mode-on-p) (centaur-tabs-local-mode)))
-  (add-hook! '(c-mode-common-hook
-               eshell-mode-hook
-               makefile-mode-hook
-               cmake-mode-hook) (centaur-tabs-local-mode -1))
+  (add-hook! 'buffer-list-update-hook
+    (if (centaur-tabs-mode-on-p)
+        (if
+            (or
+             (derived-mode-p 'c-mode)
+             (derived-mode-p 'eshell-mode)
+             (derived-mode-p 'makefile-mode)
+             (derived-mode-p 'cmake-mode))
+            (centaur-tabs-local-mode 0)
+          (centaur-tabs-local-mode 1))))
   
   (setq centaur-tabs-style 'slant)
   (setq centaur-tabs-icon-type 'nerd-icons)
