@@ -39,6 +39,13 @@
 (use-package! flycheck
   :config
   (setq flycheck-checker-error-threshold 1000))
+
+;; Dragging stuff
+(use-package! drag-stuff
+  :config
+  (drag-stuff-global-mode)
+  (drag-stuff-define-keys))
+
 ;;;;; END OF GENERAL CONFIG
 
 ;;;;; ORG SETUP
