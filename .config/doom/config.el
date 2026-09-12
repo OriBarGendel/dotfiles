@@ -3,6 +3,8 @@
 ;;;;; GENERAL CONFIG
 (setq doom-theme 'doom-dracula)
 
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14.0))
+
 (setq display-line-numbers-type t)
 
 ;; Fine undo steps. Otherwise undo undoes too much.
@@ -10,6 +12,9 @@
 
 ;; Open Emacs in fullscreen
 (push '(fullscreen . maximized) default-frame-alist)
+
+;; Reduce tab-width to 4
+(setq-default tab-width 4)
 
 ;; Auto-centres windows
 (use-package! perfect-margin
