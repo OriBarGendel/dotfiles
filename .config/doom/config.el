@@ -54,7 +54,9 @@
 (use-package! org
   :config
   (add-hook 'org-mode-hook 'doom-disable-line-numbers-h)
-  (setq org-export-preserve-breaks t))
+  (setq org-export-preserve-breaks t)
+  (setq org-image-max-width 0.3)
+  (setq org-image-align 'center))
 
 (use-package! org-id
   :config
@@ -507,6 +509,88 @@ Requires the Python package BibtexParser V2."
   (setq org-noter-hide-other t))
 ;;;;; END OF ORG NOTER SETUP
 
+;;;;; SUPERNOTE SETUP
+(defvar my/supernote-directory "~/Documents/notes/supernote/")
+(defun my/find-svg-files (dir)
+  "Recursively collect all .svg files under DIR using the `find' utility,
+skipping any hidden files or hidden subdirectories (any path component
+starting with a dot). Returns a list of absolute file paths."
+  (let* ((dir (expand-file-name dir))
+         (default-directory dir)
+         (find-cmd
+          (concat "find . "
+                  "\\( -path '*/.*' -prune \\) -o "
+                  "-type f -iname '*.svg' -print"))
+         (output (shell-command-to-string find-cmd)))
+    (mapcar (lambda (rel) (expand-file-name rel dir))
+            (seq-remove #'string-empty-p (split-string output "\n")))))
+
+(defun my/file-mtime (f)
+  "Return the modification time of file F."
+  (nth 5 (file-attributes f)))
+
+(defun my/svg-files-sorted-by-date (dir)
+  "Return all non-hidden .svg files under DIR (recursively), grouped by
+their containing directory and ordered so that:
+  1. Directories are ordered newest-first, where a directory's \"date\"
+     is the mtime of its most recently modified .svg file.
+  2. Within each directory, files are sorted newest-first."
+  (let* ((files (my/find-svg-files dir))
+         ;; Group files by their containing directory.
+         (groups (make-hash-table :test 'equal)))
+    (dolist (f files)
+      (let ((d (file-name-directory f)))
+        (puthash d (cons f (gethash d groups)) groups)))
+    (let (dir-entries)
+      (maphash
+       (lambda (d fs)
+         (let* ((sorted-fs (sort fs (lambda (a b)
+                                       (time-less-p (my/file-mtime b)
+                                                    (my/file-mtime a)))))
+                (newest-mtime (my/file-mtime (car sorted-fs))))
+           (push (list d newest-mtime sorted-fs) dir-entries)))
+       groups)
+      ;; Sort directory groups newest-first, then flatten.
+      (setq dir-entries
+            (sort dir-entries
+                  (lambda (a b) (time-less-p (nth 1 b) (nth 1 a)))))
+      (apply #'append (mapcar #'caddr dir-entries)))))
+
+(defun my/ivy-choose-svg-file ()
+  "Prompt via ivy for an SVG file under the current directory.
+Directories are ordered newest-first (by their most recently modified
+.svg file), and files within each directory are also newest-first.
+Hidden files/folders are excluded. Returns the chosen file's full path,
+or nil if nothing was found/selected."
+  (let* ((dir (or default-directory "."))
+         (files (my/svg-files-sorted-by-date dir)))
+    (if (null files)
+        (progn
+          (message "No SVG files found under %s" dir)
+          nil)
+      (let ((file-candidates
+             (mapcar (lambda (f) (cons (file-relative-name f dir) f)) files)))
+        (cdr (assoc (ivy-read "Choose SVG: " file-candidates
+                               :caller 'my/ivy-choose-svg-file)
+                    file-candidates))))))
+
+(defun my/insert-svg-org-link ()
+  "Select an SVG file under the current directory (dirs and files both
+newest first via ivy, hidden entries excluded), and insert it as an
+org-mode link."
+  (interactive)
+  (let ((file (my/ivy-choose-svg-file)))
+    (when file
+      (let* ((link-path (if (buffer-file-name)
+                             (file-relative-name
+                              file (file-name-directory (buffer-file-name)))
+                           file)))
+        (unless (bolp) (insert "\n"))
+        (insert (format "[[%s]]\n" link-path))
+        (when (fboundp 'org-display-inline-images)
+          (ignore-errors (org-display-inline-images)))))))
+;;;;; END OF SUPERNOTE SETUP
+
 ;;;;; PDF SETUP
 (use-package! pdf-tools
   :config
@@ -769,6 +853,9 @@ Requires the Python package BibtexParser V2."
       "C-c k" 'org-noter-kill-session)
 (map! :map org-noter-notes-mode-map
       "C-c k" 'org-noter-kill-session)
+
+;; supernote keybindings
+(map! :map org-mode-map "C-c i d" 'my/insert-svg-org-link)
 
 ;; pdf-tools keybindings
 (map! :map pdf-view-roll-minor-mode-map

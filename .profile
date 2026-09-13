@@ -31,3 +31,6 @@ fi
 export QT_QPA_PLATFORMTHEME=kde
 
 export PATH=$PATH:/usr/local/texlive/2026/bin/x86_64-linux/:~/.config/emacs/bin
+
+# Convert .note to .svg in the background by listening in to syncthing
+~/Documents/notes/supernote/convert.sh &
